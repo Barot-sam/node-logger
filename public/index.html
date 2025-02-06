@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Real-Time Log Viewer</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f4f4f4;
+      }
+      h2 {
+        text-align: center;
+      }
+      #logs {
+        background: white;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 800px;
+        margin: auto;
+        overflow-y: auto;
+        max-height: 500px;
+      }
+      pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Real-Time Log Viewer</h2>
+    <div id="logs">
+      <pre id="logContent">Waiting for logs...</pre>
+    </div>
+
+    <script>
+      const socket = io();
+
+      socket.on("init_logs", (logs) => {
+        updateLogs(logs);
+      });
+
+      socket.on("new_log", (logs) => {
+        updateLogs(logs);
+      });
+
+      function updateLogs(logs) {
+        document.getElementById("logContent").textContent = JSON.stringify(
+          logs,
+          null,
+          4
+        );
+      }
+    </script>
+  </body>
+</html>
